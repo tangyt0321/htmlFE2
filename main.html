@@ -30,105 +30,228 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
+
 <style>
-    .music-item {
+    /* 底部栏覆盖左侧栏覆盖顶部栏，剩余为主题部分，除主体部分可滑动外，其余部分均固定在顶部左边和底部 */
+    .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;                                 /* 左侧栏 */
+        width: 100%;
+        height: 40px;
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+    }
+
+   .search-box {
         display: flex;
         align-items: center;
+    }
+
+   .search-box input {
+        width: 200px;
+        height: 30px;
+        padding: 0 10px;
+        border: none;
+        border-radius: 3px;
+        background-color: #fff;
+    }
+
+   .search-box button {
+        width: 60px;
+        height: 30px;
+        border: none;
+        border-radius: 3px;
+        background-color: #4CAF50;
+        color: #fff;
+        cursor: pointer;
+    }
+
+   .account {
+        display: flex;
+        align-items: center;
+    }
+
+   .account img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+   .account span {
+        font-size: 16px;
+    }
+
+   .main-content {
+        display: flex;
+        height: 100vh;
+    }
+
+   .left-sidebar {
+        width: 200px;
+        height: 100%;
+        background-color: #f5f5f5;
+        position: fixed;
+        top: 40px;
+        left: 0;
+        overflow-y: auto;
+    }
+
+   .music_added {
+        padding: 10px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f5f5f5;
+        border-bottom: 1px solid #ccc;
+    }
+
+   .custom-list {
+        padding: 10px;
+    }
+
+   .custom-list h3 {
+        font-size: 16px;
+        color: #333;
         margin-bottom: 10px;
     }
 
-    .music-img {
-        width: 100px;
-        height: 100px;
+   .custom-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+   .custom-list li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+   .custom-list li:hover {
+        background-color: #f5f5f5;
+    }
+
+   .custom-list li span {
+        font-size: 14px;
+        color: #666;
+    }
+
+   .recommend-list {
+        padding: 10px;
+    }
+
+   .recommend-list h3 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+   .recommend-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+   .recommend-list li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+   .recommend-list li:hover {
+        background-color: #f5f5f5;
+    }
+
+   .recommend-list li span {
+        font-size: 14px;
+        color: #666;
+    }
+
+   .right-main {
+        width: calc(100% - 200px);
+        height: 100%;
+        position: fixed;
+        top: 40px;
+        right: 0;
+        overflow-y: auto;
+    }
+
+   .music-list {
+        padding: 10px;
+    }
+
+   .music-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+   .music-list li {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+   .music-list li:hover {
+        background-color: #f5f5f5;
+    }
+
+   .music-list li img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
         margin-right: 10px;
     }
 
-    .music-info {
-        flex: 1;
-    }
-
-    .music-name {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .music-artist {
+   .music-list li span {
         font-size: 14px;
-        color: #999;
+        color: #333;
     }
 
-    .music-control {
+   .bottom-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        background-color: #333;
+        color: #fff;
         display: flex;
         justify-content: space-between;
-        margin-top: 10px;
+        align-items: center;
+        padding: 0 20px;
     }
 
-    .play-btn {
-        display: none;
-        width: 30px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
+   .play-btn {
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
+        background-color: #4CAF50;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         cursor: pointer;
     }
 
-    .pause-btn {
-        display: none;
-        width: 30px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 50%;
-        cursor: pointer;
+   .play-btn i {
+        font-size: 20px;
     }
 
-    .prev-btn {
-        width: 30px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    .next-btn {
-        width: 30px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    .volume-ctrl {
-        width: 100px;
-        margin-right: 10px;
-    }
-
-    .mute-btn {
-        width: 30px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    .progress-bar {
-        width: 100%;
-        height: 20px;
-        background-color: #eee;
+   .progress-bar {
+        width: 70%;
+        height: 10px;
+        background-color: #ccc;
         position: relative;
     }
 
-    .progress-bar-inner {
+   .progress {
         height: 100%;
         background-color: #4CAF50;
         position: absolute;
@@ -136,741 +259,316 @@
         top: 0;
     }
 
-    .play-time {
-        font-size: 14px;
-        color: #999;
+   .volume-bar {
+        display: flex;
+        align-items: center;
+    }
+
+   .volume-bar i {
+        font-size: 20px;
         margin-right: 10px;
     }
 
-    .total-time {
-        font-size: 14px;
-        color: #999;
-    }
+    /* 响应式布局 */
+    /* @media screen and (max-width: 768px) {
+       .top-bar {
+            height: 50px;
+            padding: 0 10px;
+        }
 
-    #search-box {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
+       .search-box input {
+            width: 150px;
+        }
 
-    #search-box input {
-        width: 200px;
-        padding: 5px;
-        border: none;
-        border-radius: 5px;
-    }
+       .account img {
+            width: 25px;
+            height: 25px;
+        }
 
-    #search-box button {
-        width: 50px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+       .account span {
+            font-size: 14px;
+        }
 
-    #playlist {
-        margin-bottom: 10px;
-    }
+       .left-sidebar {
+            width: 150px;
+        }
 
-    #playlist h2 {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
+        .custom-list h3 {
+            font-size: 14px;
+        }
 
-    #playlist ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
+       .custom-list li {
+            padding: 5px;
+        }
 
-    #playlist li {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
+       .custom-list li span {
+            font-size: 12px;
+        }
 
-    #playlist li img {
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
-    }
+        .recommend-list h3 {
+            font-size: 14px;
+        }
 
-    #playlist li.playlist-info {
-        flex: 1;
-    }
+       .recommend-list li {
+            padding: 5px;
+        }
 
-    #playlist li.playlist-name {
-        font-size: 16px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
+        .recommend-list li span {
+            font-size: 12px;
+        }
 
-    #playlist li.playlist-artist {
-        font-size: 14px;
-        color: #999;
-    }
+       .right-main {
+            width: calc(100% - 150px);
+        }
 
-    #playlist li button {
-        width: 30px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 50%;
-        cursor: pointer;
-    }
+       .music-list li {
+            padding: 5px;
+        }
 
-    #playlist.playlist-control {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
+       .music-list li img {
+            width: 40px;
+            height: 40px;
+        }
 
-    #playlist.playlist-add {
-        display: none;
-        margin-top: 10px;
-    }
+       .music-list li span {
+            font-size: 12px;
+        }
 
-    #playlist.playlist-add input {
-        width: 200px;
-        padding: 5px;
-        border: none;
-        border-radius: 5px;
-    }
+       .bottom-bar {
+            height: 50px;
+            padding: 0 10px;
+        }
 
-    #playlist.playlist-add button {
-        width: 50px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+       .play-btn {
+            width: 30px;
+            height: 30px;
+        }
 
-    #playlist.playlist-sort {
-        display: none;
-        margin-top: 10px;
-    }
+       .play-btn i {
+            font-size: 16px;
+        }
 
-    #playlist.playlist-sort button {
-        width: 50px;
-        height: 30px;
-        border: none;
-        background-color: #4CAF50;
-        color: #fff;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+       .progress-bar {
+            width: 60%;
+        }
 
-    #player {
-        display: none;
-    }
+       .volume-bar i {
+            font-size: 16px;
+        }
+    } */
+    
 </style>
 
+<script>
+    //音乐列表
+    var musicList = [];
+
+    //自定义歌单列表
+    var customList = [];
+
+    //推荐歌单列表
+    var recommendList = [];
+
+    //当前播放的音乐
+    var currentMusic = null;
+
+    //当前播放的音乐的进度
+    var currentProgress = 0;
+
+    //当前播放的音乐的总时长
+    var currentDuration = 0;
+
+    //当前音量
+    var currentVolume = 1;
+
+    //是否静音
+    var isMute = false;
+
+    //加载音乐列表
+    function loadMusicList() {
+        //获取music文件夹下所有音乐文件
+        var musicFiles = [];
+        $.ajax({
+            url: 'music',
+            type: 'GET',
+            async: false,
+            success: function(data) {
+                musicFiles = data;
+            }
+        });
+
+        //遍历音乐文件，获取音乐名称和封面图片
+        for (var i = 0; i < musicFiles.length; i++) {
+            var music = {};
+            music.name = musicFiles[i].replace('.mp3', '');
+            music.cover = 'images/' + music.name + '.jpg';
+            musicList.push(music);
+        }
+
+        //渲染音乐列表
+        var html = '';
+        for (var i = 0; i < musicList.length; i++) {
+            var music = musicList[i];
+            html += '<li data-music="' + i + '"><img src="' + music.cover + '"><span>' + music.name + '</span></li>';
+        }
+        $('.music-list ul').html(html);
+    }
+
+    //加载自定义歌单列表
+    function loadCustomList() {
+        //获取localStorage中的自定义歌单列表
+        var customListStr = localStorage.getItem('customList');
+        if (customListStr) {
+            customList = JSON.parse(customListStr);
+        }
+
+        //渲染自定义歌单列表
+        var html = '';
+        for (var i = 0; i < customList.length; i++) {
+            var list = customList[i];
+            html += '<li data-list="' + list.name + '"><span>' + list.name + '</span><i class="fa fa-trash"></i></li>';
+        }
+        $('.custom-list ul').html(html);
+    }
+
+    //加载推荐歌单列表
+
+
+
+    $(document).ready(function() {
+        //加载音乐列表
+        loadMusicList();
+
+        //加载自定义歌单列表
+        loadCustomList();
+
+        //加载推荐歌单列表
+        loadRecommendList();
+        
+        //搜索音乐
+        $('.search-btn').click(function() {
+            var keyword = $('.search-box input').val();
+            if (keyword) {
+                searchMusic(keyword);
+            }
+        });
+
+        //播放音乐
+        $('.music-list li').click(function() {
+            var music = $(this).data('music');
+            playMusic(music);
+        });
+
+        //暂停音乐
+        $('.play-btn').click(function() {
+            if ($(this).hasClass('fa-play')) {
+                $(this).removeClass('fa-play').addClass('fa-pause');
+                pauseMusic();
+            } else {
+                $(this).removeClass('fa-pause').addClass('fa-play');
+                playMusic();
+            }
+        });
+
+        //上一首音乐
+        $('.prev-btn').click(function() {
+            prevMusic();
+        });
+
+        //下一首音乐
+        $('.next-btn').click(function() {
+            nextMusic();
+        });
+
+        //静音
+        $('.volume-bar i:eq(2)').click(function() {
+            muteMusic();
+        });
+
+        //音量调节
+        $('.volume-bar i:eq(0)').click(function() {
+            volumeUp();
+        });
+
+        //音量调节
+        $('.volume-bar i:eq(1)').click(function() {
+            volumeDown();
+        });
+
+        //添加到自定义歌单
+        $('.add-list-btn').click(function() {
+            var listName = prompt('请输入歌单名称：');
+            if (listName) {
+                addMusicToCustomList(listName);
+            }
+        });
+
+        //删除自定义歌单
+        $('.custom-list li').click(function() {
+            var listName = $(this).data('list');
+            deleteCustomList(listName);
+        });
+
+        //调整播放顺序
+        $('.custom-list ul').sortable();
+
+        //调整播放顺序
+        $('.recommend-list ul').sortable();
+
+    });
+</script>
+
 <body>
-    <div id="music-list">
-        <div class="music-item">
-            <img src="images/song1.jpg" alt="song1">
-            <div class="music-info">
-                <p class="music-name">song1</p>
-                <p class="music-artist">artist1</p>
-            </div>
-            <div class="music-control">
-                <button class="play-btn">播放</button>
-                <button class="pause-btn">暂停</button>
-                <button class="prev-btn">上一首</button>
-                <button class="next-btn">下一首</button>
-                <input type="range" class="volume-ctrl" min="0" max="100" value="50">
-                <button class="mute-btn">静音</button>
-                <div class="progress-bar">
-                    <div class="progress-bar-inner"></div>
-                </div>
-                <p class="play-time">00:00</p>
-                <p class="total-time">00:00</p>
-            </div>
-        </div>
-        <div id="search-box">
+    <!-- 用网易云音乐的界面设计 -->
+    <div class="top-bar">
+        <div class="search-box">
             <input type="text" placeholder="搜索音乐">
             <button class="search-btn">搜索</button>
         </div>
-        <div id="playlist">
-            <h2>播放列表</h2>
-            <ul class="playlist-list">
-                <li class="playlist-item">
-                    <img src="images/song1.jpg" alt="song1">
-                    <div class="playlist-info">
-                        <p class="playlist-name">song1</p>
-                        <p class="playlist-artist">artist1</p>
-                    </div>
-                    <button class="playlist-remove-btn">移除</button>
-                </li>
-                <li class="playlist-item">
-                    <img src="images/song2.jpg" alt="song2">
-                    <div class="playlist-info">
-                        <p class="playlist-name">song2</p>
-                        <p class="playlist-artist">artist2</p>
-                    </div>
-                    <button class="playlist-remove-btn">移除</button>
-                </li>
-            </ul>
-            <div class="playlist-control">
-                <button class="playlist-add-btn">添加到播放列表</button>
-                <button class="playlist-sort-btn">排序</button>
+        <div class="account">
+            <img src="images/avatar.jpg" alt="avatar">
+            <span>用户名</span>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="left-sidebar">
+            <div>
+                <h3 class="music_added">歌单一：已添加音乐</h3>
             </div>
-            <div class="playlist-edit">
-                <input type="text" placeholder="歌曲名称">
-                <input type="text" placeholder="歌手名称">
-                <button class="playlist-edit-btn">确定</button>
-                <button class="playlist-cancel-btn">取消</button>
+            <div class="custom-list">
+                <h3>自定义歌单列表</h3>
+                <button class="add-list-btn">新建歌单</button>
+                <ul></ul>
             </div>
-            <div class="playlist-add">
-                <input type="file" id="file-input">
-                <button class="playlist-add-file-btn">添加文件</button>
-                <button class="playlist-add-folder-btn">添加文件夹</button>
-                <button class="playlist-add-cancel-btn">取消</button>
-            </div>
-            <div class="playlist-sort">
-                <button class="playlist-sort-asc-btn">升序</button>
-                <button class="playlist-sort-desc-btn">降序</button>
-                <button class="playlist-sort-cancel-btn">取消</button>
+            <div class="recommend-list">
+                <h3>推荐歌单</h3>
+                <ul></ul>
             </div>
         </div>
-        <audio id="player" controls>
-            <source src="music/song1.mp3" type="audio/mp3">
-        </audio>
-        <script>
-            $(document).ready(function () {
-                // 音乐播放功能
-
-                // 1、读取音乐列表
-                $.getJSON("music/music.json", function (data) {
-                    // 显示音乐列表
-                    var musicList = $("#music-list");
-                    $.each(data, function (index, item) {
-                        var musicItem = $("<div class='music-item'></div>");
-                        var musicImg = $("<img src='images/" + item.name + ".jpg' alt='" + item.name + "'>");
-                        var musicInfo = $("<div class='music-info'></div>");
-                        var musicName = $("<p class='music-name'>" + item.name + "</p>");
-                        var musicArtist = $("<p class='music-artist'>" + item.artist + "</p>");
-                        musicInfo.append(musicName).append(musicArtist);
-                        musicItem.append(musicImg).append(musicInfo);
-                        musicList.append(musicItem);
-                    });
-                });
-
-                // 2、播放音乐
-                var player = $("#player")[0];
-                var playBtn = $(".play-btn");
-                var pauseBtn = $(".pause-btn");
-                var prevBtn = $(".prev-btn");
-                var nextBtn = $(".next-btn");
-                var volumeCtrl = $(".volume-ctrl");
-                var muteBtn = $(".mute-btn");
-                var progressBar = $(".progress-bar-inner");
-                var playTime = $(".play-time");
-                var totalTime = $(".total-time");
-                var musicList = $("#music-list");
-                var currentMusicItem = null;
-                var currentMusicIndex = -1;
-                var musicListItems = musicList.children(".music-item");
-                var musicListLength = musicListItems.length;
-                var isPlaying = false;
-                var isMuted = false;
-                var volume = 0.5;
-                var progressInterval = null;
-
-                // 切换音乐
-                musicListItems.click(function () {
-                    if (isPlaying) {
-                        player.pause();
-                    }
-                    currentMusicIndex = $(this).index();
-                    currentMusicItem = $(this);
-                    player.src = "music/" + currentMusicItem.find(".music-name").text() + ".mp3";
-                    player.load();
-                    playBtn.show();
-                    pauseBtn.hide();
-                    playTime.text("00:00");
-                    totalTime.text("00:00");
-                    progressBar.css("width", "0%");
-                    play();
-                });
-
-                // 播放
-                playBtn.click(function () {
-                    if (isPlaying) {
-                        player.pause();
-                        $(this).hide();
-                        pauseBtn.show();
-                    } else {
-                        player.play();
-                        $(this).hide();
-                        pauseBtn.show();
-                    }
-                    isPlaying = !isPlaying;
-                });
-
-                // 暂停
-                pauseBtn.click(function () {
-                    player.pause();
-                    $(this).hide();
-                    playBtn.show();
-                    isPlaying = false;
-                });
-
-                // 上一首
-                prevBtn.click(function () {
-                    if (currentMusicIndex > 0) {
-                        currentMusicIndex--;
-                        currentMusicItem.fadeOut(function () {
-                            currentMusicItem = musicListItems.eq(currentMusicIndex);
-                            currentMusicItem.fadeIn();
-                        });
-                        player.src = "music/" + currentMusicItem.find(".music-name").text() + ".mp3";
-                        player.load();
-                        playBtn.show();
-                        pauseBtn.hide();
-                        playTime.text("00:00");
-                        totalTime.text("00:00");
-                        progressBar.css("width", "0%");
-                        play();
-                    }
-                });
-
-                // 下一首
-                nextBtn.click(function () {
-                    if (currentMusicIndex < musicListLength - 1) {
-                        currentMusicIndex++;
-                        currentMusicItem.fadeOut(function () {
-                            currentMusicItem = musicListItems.eq(currentMusicIndex);
-                            currentMusicItem.fadeIn();
-                        });
-                        player.src = "music/" + currentMusicItem.find(".music-name").text() + ".mp3";
-                        player.load();
-                        playBtn.show();
-                        pauseBtn.hide();
-                        playTime.text("00:00");
-                        totalTime.text("00:00");
-                        progressBar.css("width", "0%");
-                        play();
-                    }
-                });
-
-                // 音量调节
-                volumeCtrl.change(function () {
-                    volume = $(this).val() / 100;
-                    player.volume = volume;
-                    if (isMuted) {
-                        player.volume = 0;
-                    }
-                });
-
-                // 静音
-                muteBtn.click(function () {
-                    isMuted = !isMuted;
-                    if (isMuted) {
-                        player.volume = 0;
-                        $(this).text("取消静音");
-                    } else {
-                        player.volume = volume;
-                        $(this).text("静音");
-                    }
-                });
-
-                // 显示播放进度
-                player.addEventListener("timeupdate", function () {
-                    var currentTime = player.currentTime;
-                    var totalTime = player.duration;
-                    var progress = currentTime / totalTime * 100;
-                    progressBar.css("width", progress + "%");
-                    playTime.text(formatTime(currentTime));
-                    totalTime.text(formatTime(totalTime));
-                });
-
-                // 显示已播放时间/总时长
-                function formatTime(time) {
-                    var minute = parseInt(time / 60);
-                    var second = parseInt(time % 60);
-                    if (minute < 10) {
-                        minute = "0" + minute;
-                    }
-                    if (second < 10) {
-                        second = "0" + second;
-                    }
-                    return minute + ":" + second;
-                }
-
-                // 播放
-                function play() {
-                    player.play();
-                    isPlaying = true;
-                    progressInterval = setInterval(function () {
-                        player.dispatchEvent(new Event("timeupdate"));
-                    }, 1000);
-                }
-
-                // 停止
-                function stop() {
-                    player.pause();
-                    clearInterval(progressInterval);
-                    isPlaying = false;
-                }
-
-                // 切换音乐
-                function switchMusic(index) {
-                    if (isPlaying) {
-                        player.pause();
-                    }
-                    currentMusicIndex = index;
-                    currentMusicItem = musicListItems.eq(index);
-                    player.src = "music/" + currentMusicItem.find(".music-name").text() + ".mp3";
-                    player.load();
-                    playBtn.show();
-                    pauseBtn.hide();
-                    playTime.text("00:00");
-                    totalTime.text("00:00");
-                    progressBar.css("width", "0%");
-                    play();
-                }
-
-                // 音乐搜索
-                var searchBox = $("#search-box");
-                var searchBtn = $(".search-btn");
-                var searchInput = searchBox.find("input");
-                var searchResult = $("#music-list");
-                var searchResultItems = searchResult.children(".music-item");
-                var searchResultLength = searchResultItems.length;
-                var searchResultIndex = -1;
-
-                searchBtn.click(function () {
-                    var keyword = searchInput.val().trim();
-                    if (keyword) {
-                        searchResultItems.hide();
-                        searchResultItems.each(function (index, item) {
-                            var name = $(item).find(".music-name").text().toLowerCase();
-                            var artist = $(item).find(".music-artist").text().toLowerCase();
-                            if (name.indexOf(keyword) > -1 || artist.indexOf(keyword) > -1) {
-                                $(item).show();
-                            }
-                        });
-                    } else {
-                        searchResultItems.show();
-                    }
-                });
-
-                // 播放列表管理
-                var playlist = $("#playlist");
-                var playlistList = playlist.find(".playlist-list");
-                var playlistItems = playlistList.children(".playlist-item");
-                var playlistLength = playlistItems.length;
-                var playlistEdit = playlist.find(".playlist-edit");
-                var playlistEditBtn = playlistEdit.find(".playlist-edit-btn");
-                var playlistEditName = playlistEdit.find("input:first");
-                var playlistEditArtist = playlistEdit.find("input:last");
-                var playlistAdd = playlist.find(".playlist-add");
-                var playlistAddBtn = playlistAdd.find(".playlist-add-btn");
-                var playlistAddFileBtn = playlistAdd.find(".playlist-add-file-btn");
-                var playlistAddFolderBtn = playlistAdd.find(".playlist-add-folder-btn");
-                var playlistAddCancelBtn = playlistAdd.find(".playlist-add-cancel-btn");
-                var playlistSort = playlist.find(".playlist-sort");
-                var playlistSortAscBtn = playlistSort.find(".playlist-sort-asc-btn");
-                var playlistSortDescBtn = playlistSort.find(".playlist-sort-desc-btn");
-                var playlistSortCancelBtn = playlistSort.find(".playlist-sort-cancel-btn");
-                var playlistSortAsc = true;
-
-                // 添加到播放列表
-                playlistAddBtn.click(function () {
-                    var name = playlistEditName.val().trim();
-                    var artist = playlistEditArtist.val().trim();
-                    if (name && artist) {
-                        var musicItem = $("<li class='playlist-item'></li>");
-                        var musicImg = $("<img src='images/" + name + ".jpg' alt='" + name + "'>");
-                        var musicInfo = $("<div class='playlist-info'></div>");
-                        var musicName = $("<p class='playlist-name'>" + name + "</p>");
-                        var musicArtist = $("<p class='playlist-artist'>" + artist + "</p>");
-                        var musicRemoveBtn = $("<button class='playlist-remove-btn'>移除</button>");
-                        musicInfo.append(musicName).append(musicArtist).append(musicRemoveBtn);
-                        musicItem.append(musicImg).append(musicInfo);
-                        playlistList.append(musicItem);
-                        playlistLength++;
-                        playlistEditName.val("");
-                        playlistEditArtist.val("");
-                        playlistEditBtn.text("添加到播放列表");
-                        playlistEditBtn.data("action", "add");
-                    }
-                });
-
-                // 编辑播放列表
-                playlistItems.find(".playlist-name").click(function () {
-                    var name = $(this).text();
-                    var artist = $(this).parent().find(".playlist-artist").text();
-                    playlistEditName.val(name);
-                    playlistEditArtist.val(artist);
-                    playlistEditBtn.text("确定");
-                    playlistEditBtn.data("action", "edit");
-                });
-
-                // 确定编辑
-                playlistEditBtn.click(function () {
-                    var action = $(this).data("action");
-                    var name = playlistEditName.val().trim();
-                    var artist = playlistEditArtist.val().trim();
-                    if (name && artist) {
-                        if (action === "edit") {
-                            var index = $(this).parent().parent().index();
-                            var item = playlistItems.eq(index);
-                            item.find(".playlist-name").text(name);
-                            item.find(".playlist-artist").text(artist);
-                        } else {
-                            var musicItem = $("<li class='playlist-item'></li>");
-                            var musicImg = $("<img src='images/" + name + ".jpg' alt='" + name + "'>");
-                            var musicInfo = $("<div class='playlist-info'></div>");
-                            var musicName = $("<p class='playlist-name'>" + name + "</p>");
-                            var musicArtist = $("<p class='playlist-artist'>" + artist + "</p>");
-                            var musicRemoveBtn = $("<button class='playlist-remove-btn'>移除</button>");
-                            musicInfo.append(musicName).append(musicArtist).append(musicRemoveBtn);
-                            musicItem.append(musicImg).append(musicInfo);
-                            playlistList.append(musicItem);
-                            playlistLength++;
-                        }
-                        playlistEditName.val("");
-                        playlistEditArtist.val("");
-                        playlistEditBtn.text("添加到播放列表");
-                        playlistEditBtn.data("action", "add");
-                    }
-                });
-
-                // 移除播放列表
-                playlistItems.find(".playlist-remove-btn").click(function () {
-                    $(this).parent().parent().remove();
-                    playlistLength--;
-                });
-
-                // 排序播放列表
-                playlistSortAscBtn.click(function () {
-                    playlistSortAsc = true;
-                    playlistItems.sort(function (a, b) {
-                        var nameA = $(a).find(".playlist-name").text().toLowerCase();
-                        var nameB = $(b).find(".playlist-name").text().toLowerCase();
-                        if (nameA < nameB) {
-                            return -1;
-                        } else if (nameA > nameB) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    });
-                    playlistItems.appendTo(playlistList);
-                });
-
-                playlistSortDescBtn.click(function () {
-                    playlistSortAsc = false;
-                    playlistItems.sort(function (a, b) {
-                        var nameA = $(a).find(".playlist-name").text().toLowerCase();
-                        var nameB = $(b).find(".playlist-name").text().toLowerCase();
-                        if (nameA < nameB) {
-                            return 1;
-                        } else if (nameA > nameB) {
-                            return -1;
-                        } else {
-                            return 0;
-                        }
-                    });
-                    playlistItems.appendTo(playlistList);
-                });
-
-                playlistSortCancelBtn.click(function () {
-                    playlistItems.sort(function (a, b) {
-                        return $(a).index() - $(b).index();
-                    });
-                    playlistItems.appendTo(playlistList);
-                });
-
-                // 导入音乐
-                var fileInput = $("#file-input");
-                var fileBtn = $(".file-btn");
-                var fileList = $("#file-list");
-                var fileListItems = fileList.children(".file-item");
-                var fileListLength = fileListItems.length;
-
-                fileBtn.click(function () {
-                    fileInput.click();
-                });
-
-                fileInput.change(function () {
-                    var files = this.files;
-                    for (var i = 0; i < files.length; i++) {
-                        var file = files[i];
-                        var fileItem = $("<li class='file-item'></li>");
-                        var fileName = $("<p class='file-name'>" + file.name + "</p>");
-                        var fileRemoveBtn = $("<button class='file-remove-btn'>移除</button>");
-                        fileItem.append(fileName).append(fileRemoveBtn);
-                        fileList.append(fileItem);
-                        fileListLength++;
-                    }
-                });
-
-                fileListItems.find(".file-remove-btn").click(function () {
-                    $(this).parent().remove();
-                    fileListLength--;
-                });
-
-                // 导入文件夹
-                var folderInput = $("#folder-input");
-                var folderBtn = $(".folder-btn");
-                var folderList = $("#folder-list");
-                var folderListItems = folderList.children(".folder-item");
-                var folderListLength = folderListItems.length;
-
-                folderBtn.click(function () {
-                    folderInput.click();
-                });
-
-                folderInput.change(function () {
-                    var folders = this.files;
-                    for (var i = 0; i < folders.length; i++) {
-                        var folder = folders[i];
-                        var folderItem = $("<li class='folder-item'></li>");
-                        var folderName = $("<p class='folder-name'>" + folder.name + "</p>");
-                        var folderRemoveBtn = $("<button class='folder-remove-btn'>移除</button>");
-                        folderItem.append(folderName).append(folderRemoveBtn);
-                        folderList.append(folderItem);
-                        folderListLength++;
-                    }
-                });
-
-                folderListItems.find(".folder-remove-btn").click(function () {
-                    $(this).parent().remove();
-                    folderListLength--;
-                });
-
-                // 导入播放列表
-                var playlistInput = $("#playlist-input");
-                var playlistBtn = $(".playlist-btn");
-                var playlistList = $("#playlist-list");
-                var playlistListItems = playlistList.children(".playlist-item");
-                var playlistListLength = playlistListItems.length;
-
-                playlistBtn.click(function () {
-                    playlistInput.click();
-                });
-
-                playlistInput.change(function () {
-                    var playlists = this.files;
-                    for (var i = 0; i < playlists.length; i++) {
-                        var playlist = playlists[i];
-                        var playlistItem = $("<li class='playlist-item'></li>");
-                        var playlistName = $("<p class='playlist-name'>" + playlist.name + "</p>");
-                        var playlistRemoveBtn = $("<button class='playlist-remove-btn'>移除</button>");
-                        playlistItem.append(playlistName).append(playlistRemoveBtn);
-                        playlistList.append(playlistItem);
-                        playlistListLength++;
-                    }
-                });
-
-                playlistListItems.find(".playlist-remove-btn").click(function () {
-                    $(this).parent().remove();
-                    playlistListLength--;
-                });
-
-                // 导入音乐推荐
-                var recommendInput = $("#recommend-input");
-                var recommendBtn = $(".recommend-btn");
-                var recommendList = $("#recommend-list");
-                var recommendListItems = recommendList.children(".recommend-item");
-                var recommendListLength = recommendListItems.length;
-
-                recommendBtn.click(function () {
-                    recommendInput.click();
-                });
-
-                recommendInput.change(function () {
-                    var recommends = this.files;
-                    for (var i = 0; i < recommends.length; i++) {
-                        var recommend = recommends[i];
-                        var recommendItem = $("<li class='recommend-item'></li>");
-                        var recommendName = $("<p class='recommend-name'>" + recommend.name + "</p>");
-                        var recommendRemoveBtn = $("<button class='recommend-remove-btn'>移除</button>");
-                        recommendItem.append(recommendName).append(recommendRemoveBtn);
-                        recommendList.append(recommendItem);
-                        recommendListLength++;
-                    }
-                });
-
-                recommendListItems.find(".recommend-remove-btn").click(function () {
-                    $(this).parent().remove();
-                    recommendListLength--;
-                });
-
-                // 导入音乐
-                var musicInput = $("#music-input");
-                var musicBtn = $(".music-btn");
-                var musicList = $("#music-list");
-                var musicListItems = musicList.children(".music-item");
-                var musicListLength = musicListItems.length;
-
-                musicBtn.click(function () {
-                    musicInput.click();
-                });
-
-                musicInput.change(function () {
-                    var musics = this.files;
-                    for (var i = 0; i < musics.length; i++) {
-                        var music = musics[i];
-                        var musicItem = $("<li class='music-item'></li>");
-                        var musicImg = $("<img src='images/" + music.name + ".jpg' alt='" + music.name + "'>");
-                        var musicInfo = $("<div class='music-info'></div>");
-                        var musicName = $("<p class='music-name'>" + music.name + "</p>");
-                        var musicArtist = $("<p class='music-artist'>" + music.artist + "</p>");
-                        var musicRemoveBtn = $("<button class='music-remove-btn'>移除</button>");
-                        musicInfo.append(musicName).append(musicArtist).append(musicRemoveBtn);
-                        musicItem.append(musicImg).append(musicInfo);
-                        musicList.append(musicItem);
-                        musicListLength++;
-                    }
-                });
-
-                musicListItems.find(".music-remove-btn").click(function () {
-                    $(this).parent().remove();
-                    musicListLength--;
-                });
-
-                // 导入音乐
-                var musicInput = $("#music-input");
-                var musicBtn = $(".music-btn");
-                var musicList = $("#music-list");
-                var musicListItems = musicList.children(".music-item");
-                var musicListLength = musicListItems.length;
-
-                musicBtn.click(function () {
-                    musicInput.click();
-                });
-
-                musicInput.change(function () {
-                    var musics = this.files;
-                    for (var i = 0; i < musics.length; i++) {
-                        var music = musics[i];
-                        var musicItem = $("<li class='music-item'></li>");
-                        var musicImg = $("<img src='images/" + music.name + ".jpg' alt='" + music.name + "'>");
-                        var musicInfo = $("<div class='music-info'></div>");
-                        var musicName = $("<p class='music-name'>" + music.name + "</p>");
-                        var musicArtist = $("<p class='music-artist'>" + music.artist + "</p>");
-                        var musicRemoveBtn = $("<button class='music-remove-btn'>移除</button>");
-                        musicInfo.append(musicName).append(musicArtist).append(musicRemoveBtn);
-                        musicItem.append(musicImg).append(musicInfo);
-                        musicList.append(musicItem);
-                        musicListLength++;
-                    }
-                });
-
-            });
+        <!-- 右侧主体：音乐播放列表 -->
+        <div class="right-main">
+            <div class="music-list">
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+    <!-- 底部栏：播放控制按钮、音乐进度条、音量调节 -->
+    <div class="bottom-bar">
+        <div class="play-btn">
+            <i class="fa fa-play"></i>
+        </div>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="volume-bar">
+            <i class="fa fa-volume-up"></i>
+            <i class="fa fa-volume-down"></i>
+            <i class="fa fa-volume-off"></i>
+        </div>
+    </div>
 
 
-        </script>
 </body>
 
 </html>
