@@ -36,7 +36,8 @@
     .top-bar {
         position: fixed;
         top: 0;
-        left: 0;                                 /* 左侧栏 */
+        left: 0;
+        /* 左侧栏 */
         width: 100%;
         height: 40px;
         background-color: #333;
@@ -47,12 +48,12 @@
         padding: 0 20px;
     }
 
-   .search-box {
+    .search-box {
         display: flex;
         align-items: center;
     }
 
-   .search-box input {
+    .search-box input {
         width: 200px;
         height: 30px;
         padding: 0 10px;
@@ -61,9 +62,10 @@
         background-color: #fff;
     }
 
-   .search-box button {
+    .search-box button {
         width: 60px;
         height: 30px;
+        margin-left: 10px;
         border: none;
         border-radius: 3px;
         background-color: #4CAF50;
@@ -71,28 +73,35 @@
         cursor: pointer;
     }
 
-   .account {
-        display: flex;
-        align-items: center;
+    .search-box button:hover {
+        background-color: #3e8e41;
     }
 
-   .account img {
+
+
+    .account {
+        display: flex;
+        align-items: center;
+        margin-right: 100px;
+    }
+
+    .account img {
         width: 30px;
         height: 30px;
         border-radius: 50%;
         margin-right: 10px;
     }
 
-   .account span {
+    .account span {
         font-size: 16px;
     }
 
-   .main-content {
+    .main-content {
         display: flex;
         height: 100vh;
     }
 
-   .left-sidebar {
+    .left-sidebar {
         width: 200px;
         height: 100%;
         background-color: #f5f5f5;
@@ -102,7 +111,7 @@
         overflow-y: auto;
     }
 
-   .music_added {
+    .music_added {
         padding: 10px;
         font-size: 16px;
         color: #333;
@@ -110,69 +119,73 @@
         border-bottom: 1px solid #ccc;
     }
 
-   .custom-list {
+    .music_added:hover {
+        background-color: #e5e5e5;
+    }
+
+    .custom-list {
         padding: 10px;
     }
 
-   .custom-list h3 {
-        font-size: 16px;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-   .custom-list ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-   .custom-list li {
-        padding: 10px;
-        border-bottom: 1px solid #ccc;
-        cursor: pointer;
-    }
-
-   .custom-list li:hover {
-        background-color: #f5f5f5;
-    }
-
-   .custom-list li span {
-        font-size: 14px;
-        color: #666;
-    }
-
-   .recommend-list {
-        padding: 10px;
-    }
-
-   .recommend-list h3 {
+    .custom-list h3 {
         font-size: 16px;
         color: #333;
         margin-bottom: 10px;
     }
 
-   .recommend-list ul {
+    .custom-list ul {
         list-style: none;
         padding: 0;
         margin: 0;
     }
 
-   .recommend-list li {
+    .custom-list li {
         padding: 10px;
         border-bottom: 1px solid #ccc;
         cursor: pointer;
     }
 
-   .recommend-list li:hover {
+    .custom-list li:hover {
         background-color: #f5f5f5;
     }
 
-   .recommend-list li span {
+    .custom-list li span {
         font-size: 14px;
         color: #666;
     }
 
-   .right-main {
+    .recommend-list {
+        padding: 10px;
+    }
+
+    .recommend-list h3 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .recommend-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .recommend-list li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+    .recommend-list li:hover {
+        background-color: #f5f5f5;
+    }
+
+    .recommend-list li span {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .right-main {
         width: calc(100% - 200px);
         height: 100%;
         position: fixed;
@@ -181,17 +194,17 @@
         overflow-y: auto;
     }
 
-   .music-list {
+    .music-list {
         padding: 10px;
     }
 
-   .music-list ul {
+    .music-list ul {
         list-style: none;
         padding: 0;
         margin: 0;
     }
 
-   .music-list li {
+    .music-list li {
         display: flex;
         align-items: center;
         padding: 10px;
@@ -199,28 +212,28 @@
         cursor: pointer;
     }
 
-   .music-list li:hover {
+    .music-list li:hover {
         background-color: #f5f5f5;
     }
 
-   .music-list li img {
+    .music-list li img {
         width: 50px;
         height: 50px;
         border-radius: 50%;
         margin-right: 10px;
     }
 
-   .music-list li span {
+    .music-list li span {
         font-size: 14px;
         color: #333;
     }
 
-   .bottom-bar {
+    .bottom-bar {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 40px;
+        height: 80px;
         background-color: #333;
         color: #fff;
         display: flex;
@@ -229,7 +242,41 @@
         padding: 0 20px;
     }
 
-   .play-btn {
+    .pic {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    #music-name {
+        font-size: 14px;
+
+        font-weight: bold;
+    }
+
+    #music-author {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .last-btn{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .next-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    audio {
+        width: 100%;
+    }
+
+    /* .play-btn {
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -240,18 +287,18 @@
         cursor: pointer;
     }
 
-   .play-btn i {
+    .play-btn i {
         font-size: 20px;
     }
 
-   .progress-bar {
+    .progress-bar {
         width: 70%;
         height: 10px;
         background-color: #ccc;
         position: relative;
     }
 
-   .progress {
+    .progress {
         height: 100%;
         background-color: #4CAF50;
         position: absolute;
@@ -259,15 +306,15 @@
         top: 0;
     }
 
-   .volume-bar {
+    .volume-bar {
         display: flex;
         align-items: center;
     }
 
-   .volume-bar i {
+    .volume-bar i {
         font-size: 20px;
         margin-right: 10px;
-    }
+    } */
 
     /* 响应式布局 */
     /* @media screen and (max-width: 768px) {
@@ -356,166 +403,131 @@
             font-size: 16px;
         }
     } */
-    
 </style>
 
 <script>
-    //音乐列表
     var musicList = [];
-
-    //自定义歌单列表
-    var customList = [];
-
-    //推荐歌单列表
-    var recommendList = [];
-
-    //当前播放的音乐
+    var addedList = [];
+    var customLists = [];
+    var searchList = [];
     var currentMusic = null;
+    // 读取localStorage中的数据
+    var musicHistory = JSON.parse(localStorage.getItem('musicHistory') || '[]');
 
-    //当前播放的音乐的进度
-    var currentProgress = 0;
+    // 点击新建歌单按钮，弹出新建歌单的弹窗
+    $('.add-list-btn').on('click', function () {
+        var name = prompt('请输入歌单名称');
+        if (name) {
+            var list = {
+                name: name,
+                songs: []
+            };
+            customLists.push(list);
+            showCustomLists();
+        }
+    });
+    //现在只将音乐列表展示出来，后续再添加播放、暂停、上一首、下一首、音量调节等功能
 
-    //当前播放的音乐的总时长
-    var currentDuration = 0;
-
-    //当前音量
-    var currentVolume = 1;
-
-    //是否静音
-    var isMute = false;
-
-    //加载音乐列表
-    function loadMusicList() {
-        //获取music文件夹下所有音乐文件
-        var musicFiles = [];
+    $(function () {
+        // 读取music文件夹下所有音乐文件
         $.ajax({
             url: 'music',
             type: 'GET',
-            async: false,
-            success: function(data) {
-                musicFiles = data;
+            dataType: 'json',
+            success: function (data) {
+                musicList = data;
+                addedList = data;
+                showMusicList();
             }
         });
-
-        //遍历音乐文件，获取音乐名称和封面图片
-        for (var i = 0; i < musicFiles.length; i++) {
-            var music = {};
-            music.name = musicFiles[i].replace('.mp3', '');
-            music.cover = 'images/' + music.name + '.jpg';
-            musicList.push(music);
-        }
-
-        //渲染音乐列表
-        var html = '';
-        for (var i = 0; i < musicList.length; i++) {
-            var music = musicList[i];
-            html += '<li data-music="' + i + '"><img src="' + music.cover + '"><span>' + music.name + '</span></li>';
-        }
-        $('.music-list ul').html(html);
-    }
-
-    //加载自定义歌单列表
-    function loadCustomList() {
-        //获取localStorage中的自定义歌单列表
-        var customListStr = localStorage.getItem('customList');
-        if (customListStr) {
-            customList = JSON.parse(customListStr);
-        }
-
-        //渲染自定义歌单列表
-        var html = '';
-        for (var i = 0; i < customList.length; i++) {
-            var list = customList[i];
-            html += '<li data-list="' + list.name + '"><span>' + list.name + '</span><i class="fa fa-trash"></i></li>';
-        }
-        $('.custom-list ul').html(html);
-    }
-
-    //加载推荐歌单列表
-
-
-
-    $(document).ready(function() {
-        //加载音乐列表
-        loadMusicList();
-
-        //加载自定义歌单列表
-        loadCustomList();
-
-        //加载推荐歌单列表
-        loadRecommendList();
-        
-        //搜索音乐
-        $('.search-btn').click(function() {
-            var keyword = $('.search-box input').val();
-            if (keyword) {
-                searchMusic(keyword);
-            }
-        });
-
-        //播放音乐
-        $('.music-list li').click(function() {
-            var music = $(this).data('music');
-            playMusic(music);
-        });
-
-        //暂停音乐
-        $('.play-btn').click(function() {
-            if ($(this).hasClass('fa-play')) {
-                $(this).removeClass('fa-play').addClass('fa-pause');
-                pauseMusic();
-            } else {
-                $(this).removeClass('fa-pause').addClass('fa-play');
-                playMusic();
-            }
-        });
-
-        //上一首音乐
-        $('.prev-btn').click(function() {
-            prevMusic();
-        });
-
-        //下一首音乐
-        $('.next-btn').click(function() {
-            nextMusic();
-        });
-
-        //静音
-        $('.volume-bar i:eq(2)').click(function() {
-            muteMusic();
-        });
-
-        //音量调节
-        $('.volume-bar i:eq(0)').click(function() {
-            volumeUp();
-        });
-
-        //音量调节
-        $('.volume-bar i:eq(1)').click(function() {
-            volumeDown();
-        });
-
-        //添加到自定义歌单
-        $('.add-list-btn').click(function() {
-            var listName = prompt('请输入歌单名称：');
-            if (listName) {
-                addMusicToCustomList(listName);
-            }
-        });
-
-        //删除自定义歌单
-        $('.custom-list li').click(function() {
-            var listName = $(this).data('list');
-            deleteCustomList(listName);
-        });
-
-        //调整播放顺序
-        $('.custom-list ul').sortable();
-
-        //调整播放顺序
-        $('.recommend-list ul').sortable();
-
     });
+
+    // 展示音乐列表
+    function showMusicList() {
+        var musicListHtml = '';
+        for (var i = 0; i < musicList.length; i++) {
+            musicListHtml += '<li><img src="image/' + musicList[i].replace('.mp3', '.png') + '"><span>' + musicList[i] + '</span></li>';
+        }
+        $('.music-list ul').html(musicListHtml);
+    }
+
+    // 展示已添加的音乐列表
+    function showAddedList() {
+        var addedListHtml = '';
+        for (var i = 0; i < addedList.length; i++) {
+            addedListHtml += '<li><img src="image/' + addedList[i].replace('.mp3', '.png') + '"><span>' + addedList[i] + '</span></li>';
+        }
+        $('.music-list ul').html(addedListHtml);
+    }
+
+    // 展示自定义歌单列表
+    function showCustomLists() {
+        var customListsHtml = '';
+        for (var i = 0; i < customLists.length; i++) {
+            customListsHtml += '<li><span>' + customLists[i].name + '</span><i class="fa fa-trash"></i></li>';
+        }
+        $('.music-list ul').html(customListsHtml);
+    }
+
+    // 展示搜索结果
+    function showSearchList() {
+        var searchListHtml = '';
+        for (var i = 0; i < searchList.length; i++) {
+            searchListHtml += '<li><img src="image/' + searchList[i].replace('.mp3', '.png') + '"><span>' + searchList[i] + '</span></li>';
+        }
+        $('.music-list ul').html(searchListHtml);
+    }
+
+    //点击对应音乐将当前音乐替换为该音乐
+    $(document).ready(function () {
+        // 将musichistory中最后一次播放的音乐作为当前音乐
+        // alert(musicHistory);
+        if (musicHistory.length > 0) {
+            currentMusic = musicHistory[musicHistory.length - 1];
+            $('.pic').attr('src', 'image/' + currentMusic.replace('.mp3', '.png'));
+            $('#music-name').text(currentMusic);
+            $('#music-author').text('');
+            $('.bottom-bar audio').attr('src', 'music/' + currentMusic);
+        }
+
+        // 点击音乐列表
+        $('.music-list').on('click', 'li', function () {
+            var musicName = $(this).find('span').text();
+            currentMusic = musicName;
+            // 保存当前播放音乐到localStorage
+            if (musicHistory.length == 0 || musicHistory[musicHistory.length - 1] != musicName) {
+                if (musicHistory.length >= 5) {
+                    musicHistory.shift();
+                }
+                musicHistory.push(musicName);
+            }
+            localStorage.setItem('musicHistory', JSON.stringify(musicHistory));
+
+            // 展示当前音乐的封面图片、名称、作者
+            $('.pic').attr('src', 'image/' + musicName.replace('.mp3', '.png'));
+            $('#music-name').text(musicName);
+            $('#music-author').text('');
+            $('.bottom-bar audio').attr('src', 'music/' + musicName);
+        });
+
+        // 点击已添加的音乐列表
+        $('added-list').on('click', 'li', function () {
+            showAddedList();
+        });
+
+        //点击搜索
+        $('.search-btn').on('click', function () {
+            var keyword = $('.search-box input').val();
+            searchList = [];
+            for (var i = 0; i < musicList.length; i++) {
+                if (musicList[i].indexOf(keyword) != -1) {
+                    searchList.push(musicList[i]);
+                }
+            }
+            showSearchList();
+        });
+    });
+
 </script>
 
 <body>
@@ -533,29 +545,43 @@
 
     <div class="main-content">
         <div class="left-sidebar">
-            <div>
-                <h3 class="music_added">歌单一：已添加音乐</h3>
+            <div class="music_added">
+                <h3>歌单一：已添加音乐</h3>
             </div>
             <div class="custom-list">
                 <h3>自定义歌单列表</h3>
                 <button class="add-list-btn">新建歌单</button>
-                <ul></ul>
+                <ul>
+                </ul>
             </div>
             <div class="recommend-list">
                 <h3>推荐歌单</h3>
-                <ul></ul>
+                <ul> </ul>
             </div>
         </div>
         <!-- 右侧主体：音乐播放列表 -->
         <div class="right-main">
             <div class="music-list">
-                <ul></ul>
+                <ul>
+                    <li></li>
+                </ul>
             </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br>
         </div>
     </div>
     <!-- 底部栏：播放控制按钮、音乐进度条、音量调节 -->
+    <!-- 用audio标签实现播放功能，进度条和音量调节功能 -->
+
     <div class="bottom-bar">
-        <div class="play-btn">
+        <img class="pic" src="" alt="">
+        <div>
+            <span id="music-name">音乐名称</span>
+            <span id="music-author">作者</span>
+        </div>
+        <button><img class=“last-btn” src="image/last.png" alt=""></button>
+        <button><img class="next-btn" src="image/next.png" alt=""></button>
+        <audio src="" controls="controls"></audio>
+        <!-- <div class="play-btn">
             <i class="fa fa-play"></i>
         </div>
         <div class="progress-bar">
@@ -565,7 +591,7 @@
             <i class="fa fa-volume-up"></i>
             <i class="fa fa-volume-down"></i>
             <i class="fa fa-volume-off"></i>
-        </div>
+        </div> -->
     </div>
 
 
