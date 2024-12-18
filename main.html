@@ -68,13 +68,13 @@
         margin-left: 10px;
         border: none;
         border-radius: 3px;
-        background-color: #4CAF50;
+        background-color: #808080;
         color: #fff;
         cursor: pointer;
     }
 
     .search-box button:hover {
-        background-color: #3e8e41;
+        background-color: #bcbcbc;
     }
 
 
@@ -127,10 +127,21 @@
         padding: 10px;
     }
 
-    .custom-list h3 {
-        font-size: 16px;
-        color: #333;
+    .custom-list-header {
+        display: flex;
+        justify-content: space-between;
+        /* border: 1px solid #ccc; */
+        align-items: center;
         margin-bottom: 10px;
+    }
+
+    .custom-list h3 {
+        color: #333;
+    }
+
+    .add-list-btn {
+        /* 置于h3标签同行 */
+        cursor: pointer;
     }
 
     .custom-list ul {
@@ -141,17 +152,37 @@
 
     .custom-list li {
         padding: 10px;
+        display: flex;
         border-bottom: 1px solid #ccc;
+        /* justify-content: space-between; */
         cursor: pointer;
     }
 
     .custom-list li:hover {
         background-color: #f5f5f5;
+        border: 1px solid #ccc;
     }
 
     .custom-list li span {
         font-size: 14px;
         color: #666;
+    }
+
+    .custom-list li button {
+        font-size: 20px;
+        cursor: pointer;
+        border: 0;
+        /* 靠右 */
+        margin-left: auto;
+    }
+
+    .custom-list li:first-child button {
+        display: none;
+    }
+
+
+    .custom-list li button:hover {
+        background-color: #e5e5e5;
     }
 
     .recommend-list {
@@ -228,6 +259,19 @@
         color: #333;
     }
 
+    .music-list li div {
+        display: inline-block;
+        cursor: pointer;
+        /* 靠右 */
+        margin-left: auto;
+    }
+
+    .music-list li div button {
+        font-size: 10px;
+        margin-left: 8px;
+        cursor: pointer;
+    }
+
     .bottom-bar {
         position: fixed;
         bottom: 0;
@@ -241,6 +285,13 @@
         align-items: center;
         padding: 0 20px;
     }
+
+    .current-music-info {
+        display: flex;
+        width: 50%;
+        align-items: center;
+    }
+
 
     .pic {
         width: 50px;
@@ -260,61 +311,34 @@
         color: #666;
     }
 
-    .last-btn{
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-    }
-
-    .next-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-    }
-
-    audio {
+    .bottom-bar audio {
         width: 100%;
+        height: 50px;
+        margin-left: 10px;
     }
 
-    /* .play-btn {
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .last-btn {
         width: 40px;
         height: 40px;
-        border-radius: 50%;
-        background-color: #4CAF50;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
     }
 
-    .play-btn i {
-        font-size: 20px;
-    }
-
-    .progress-bar {
-        width: 70%;
-        height: 10px;
-        background-color: #ccc;
-        position: relative;
-    }
-
-    .progress {
-        height: 100%;
-        background-color: #4CAF50;
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-
-    .volume-bar {
+    .next-btn {
+        width: 40px;
+        height: 40px;
         display: flex;
+        justify-content: center;
         align-items: center;
+        cursor: pointer;
     }
-
-    .volume-bar i {
-        font-size: 20px;
-        margin-right: 10px;
-    } */
 
     /* 响应式布局 */
     /* @media screen and (max-width: 768px) {
@@ -385,103 +409,86 @@
             height: 50px;
             padding: 0 10px;
         }
-
-       .play-btn {
-            width: 30px;
-            height: 30px;
-        }
-
-       .play-btn i {
-            font-size: 16px;
-        }
-
-       .progress-bar {
-            width: 60%;
-        }
-
-       .volume-bar i {
-            font-size: 16px;
-        }
     } */
 </style>
 
 <script>
-    var musicList = [];
-    var addedList = [];
-    var customLists = [];
-    var searchList = [];
+    var musicList = [];// 音乐列表
+    var addedList = [];// 已添加的音乐列表
+    var customLists = JSON.parse(localStorage.getItem('customLists') || '[]');
+    // var recommendLists = [{ name: '热门推荐', songs: [] }, { name: '最新推荐', songs: [] }];// 推荐歌单列表
+    var recommendLists = [];// 推荐歌单列表
+    var searchList = [];// 搜索结果列表
     var currentMusic = null;
+    isliked = false;
     // 读取localStorage中的数据
     var musicHistory = JSON.parse(localStorage.getItem('musicHistory') || '[]');
 
-    // 点击新建歌单按钮，弹出新建歌单的弹窗
-    $('.add-list-btn').on('click', function () {
-        var name = prompt('请输入歌单名称');
-        if (name) {
-            var list = {
-                name: name,
-                songs: []
-            };
-            customLists.push(list);
-            showCustomLists();
+    //展示歌单
+    function showCustomList() {
+        var customListHtml = '';
+        for (var i = 0; i < customLists.length; i++) {
+            customListHtml += '<li><span>' + customLists[i].name + '</span><button class="delete-list-btn">×</button></li>';
         }
-    });
-    //现在只将音乐列表展示出来，后续再添加播放、暂停、上一首、下一首、音量调节等功能
+        $('.custom-list ul').html(customListHtml);
+        // alert(customLists.length)
+    }
 
+    // 读取music文件夹下所有音乐文件
     $(function () {
-        // 读取music文件夹下所有音乐文件
         $.ajax({
             url: 'music',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
                 musicList = data;
-                addedList = data;
-                showMusicList();
+                const authors = data.map(music => music.author); // 这里假设每个音乐对象都有一个 author 属性
+                console.log(authors);
+                showMusicList(musicList);
             }
         });
     });
 
+    //替换播放音乐为当前音乐
+    function replaceMusic(currentMusic) {
+        $('.pic').attr('src', 'image/' + currentMusic.replace('.mp3', '.png'));
+        $('#music-name').text(currentMusic);
+        $('#music-author').text('');
+        $('.bottom-bar audio').attr('src', 'music/' + currentMusic);
+    }
+
+    // 并将musicHistory中所有与当前音乐相同的音乐删除，并将当前音乐添加到musicHistory中
+    function pushAndDeleteSameMusic() {
+        for (var i = 0; i < musicHistory.length; i++) {
+            if (musicHistory[i] == currentMusic) {
+                musicHistory.splice(i, 1);
+            }
+        }
+        musicHistory.push(currentMusic);
+        localStorage.setItem('musicHistory', JSON.stringify(musicHistory));
+    }
+
     // 展示音乐列表
-    function showMusicList() {
+    function showMusicList(musicList) {
         var musicListHtml = '';
         for (var i = 0; i < musicList.length; i++) {
-            musicListHtml += '<li><img src="image/' + musicList[i].replace('.mp3', '.png') + '"><span>' + musicList[i] + '</span></li>';
+            musicListHtml += '<li><img src="image/' + musicList[i].replace('.mp3', '.png') + '"><span>' + musicList[i] + '</span><div><button class="addToLikedList-btn">喜欢</button><button class="addToCustomList-btn">添加到歌单</button></div></li>';
         }
         $('.music-list ul').html(musicListHtml);
     }
 
-    // 展示已添加的音乐列表
-    function showAddedList() {
-        var addedListHtml = '';
-        for (var i = 0; i < addedList.length; i++) {
-            addedListHtml += '<li><img src="image/' + addedList[i].replace('.mp3', '.png') + '"><span>' + addedList[i] + '</span></li>';
+    // 展示歌单音乐列表
+    function showCustomMusicList(musicList) {
+        var musicListHtml = '';
+        for (var i = 0; i < musicList.length; i++) {
+            musicListHtml += '<li><img src="image/' + musicList[i].replace('.mp3', '.png') + '"><span>' + musicList[i] + '</span><div><button class="deleteFromCustomList">×</button><button class="addToLikedList-btn">喜欢</button><button class="addToCustomList-btn">添加到歌单</button></div></li>';
         }
-        $('.music-list ul').html(addedListHtml);
-    }
-
-    // 展示自定义歌单列表
-    function showCustomLists() {
-        var customListsHtml = '';
-        for (var i = 0; i < customLists.length; i++) {
-            customListsHtml += '<li><span>' + customLists[i].name + '</span><i class="fa fa-trash"></i></li>';
-        }
-        $('.music-list ul').html(customListsHtml);
-    }
-
-    // 展示搜索结果
-    function showSearchList() {
-        var searchListHtml = '';
-        for (var i = 0; i < searchList.length; i++) {
-            searchListHtml += '<li><img src="image/' + searchList[i].replace('.mp3', '.png') + '"><span>' + searchList[i] + '</span></li>';
-        }
-        $('.music-list ul').html(searchListHtml);
+        $('.music-list ul').html(musicListHtml);
     }
 
     //点击对应音乐将当前音乐替换为该音乐
     $(document).ready(function () {
         // 将musichistory中最后一次播放的音乐作为当前音乐
-        // alert(musicHistory);
         if (musicHistory.length > 0) {
             currentMusic = musicHistory[musicHistory.length - 1];
             $('.pic').attr('src', 'image/' + currentMusic.replace('.mp3', '.png'));
@@ -490,29 +497,21 @@
             $('.bottom-bar audio').attr('src', 'music/' + currentMusic);
         }
 
+        // 读取localStorage中的数据
+        showCustomList();
         // 点击音乐列表
         $('.music-list').on('click', 'li', function () {
             var musicName = $(this).find('span').text();
             currentMusic = musicName;
             // 保存当前播放音乐到localStorage
-            if (musicHistory.length == 0 || musicHistory[musicHistory.length - 1] != musicName) {
-                if (musicHistory.length >= 5) {
-                    musicHistory.shift();
-                }
-                musicHistory.push(musicName);
-            }
-            localStorage.setItem('musicHistory', JSON.stringify(musicHistory));
-
-            // 展示当前音乐的封面图片、名称、作者
-            $('.pic').attr('src', 'image/' + musicName.replace('.mp3', '.png'));
-            $('#music-name').text(musicName);
-            $('#music-author').text('');
-            $('.bottom-bar audio').attr('src', 'music/' + musicName);
+            pushAndDeleteSameMusic();
+            replaceMusic(currentMusic);
         });
 
         // 点击已添加的音乐列表
-        $('added-list').on('click', 'li', function () {
-            showAddedList();
+        $('.music_added').on('click', function () {
+            addedList = musicList.concat();
+            showMusicList(addedList);
         });
 
         //点击搜索
@@ -524,7 +523,153 @@
                     searchList.push(musicList[i]);
                 }
             }
-            showSearchList();
+            showMusicList(searchList);
+        });
+
+        //点击下一首，如果后续无历史音乐，播放歌单内下一首音乐，否则播放下一首音乐
+        $('.next-btn').on('click', function () {
+            var index = musicHistory.indexOf(currentMusic);
+            var num = musicList.indexOf(currentMusic);
+            if (index == musicHistory.length - 1) {
+                //播放歌单内下一首音乐
+                if (num == musicList.length - 1) {
+                    alert('没有下一首了');
+                    return;
+                }
+                currentMusic = musicList[num + 1];
+                pushAndDeleteSameMusic();
+            } else {
+                index++;
+                currentMusic = musicList[index];
+            }
+            replaceMusic(currentMusic);
+            localStorage.setItem('musicHistory', JSON.stringify(musicHistory));
+        });
+
+        //点击上一首，播放历史列表内上一首音乐
+        $('.last-btn').on('click', function () {
+            var index = musicHistory.indexOf(currentMusic);
+            if (index == 0) {
+                alert('没有上一首了');
+                return;
+            }
+            index--;
+            currentMusic = musicHistory[index];
+            replaceMusic(currentMusic);
+            //保存到localStorage
+            localStorage.setItem('musicHistory', JSON.stringify(musicHistory));
+        });
+
+        //歌单
+        // 点击新建歌单按钮，弹出新建歌单的弹窗
+        $('.add-list-btn').on('click', function () {
+            if (customLists.length >= 8) {
+                alert('歌单数量已达上限');
+                return;
+            }
+            let num = 1;
+            for (let i = 0; i < customLists.length; i++) {
+                //选择含有“新建歌单”的歌单名称的最后一个数字加一作为新建歌单的名称
+                if (customLists[i].name.indexOf('新建歌单') != -1) {
+                    num = parseInt(customLists[i].name.split('新建歌单')[1]) + 1;
+                }
+            }
+            let name = '新建歌单' + num;
+
+            name = prompt('请输入歌单名称', name);
+            if (name) {
+                for (var i = 0; i < customLists.length; i++) {
+                    if (customLists[i].name == name) {
+                        alert('歌单已存在');
+                        return;
+                    }
+                }
+                var list = {
+                    name: name,
+                    songs: []
+                };
+                customLists.push(list);
+                localStorage.setItem('customLists', JSON.stringify(customLists));
+                showCustomList();
+            }
+        });
+
+        // 点击删除歌单按钮，删除该歌单
+        $('.custom-list').on('click', '.delete-list-btn', function () {
+            var index = $(this).parent().index();
+            customLists.splice(index, 1);
+            localStorage.setItem('customLists', JSON.stringify(customLists));
+            showCustomList();
+        });
+
+        // 点击添加到歌单按钮，将当前音乐添加到该歌单
+        $('.music-list').on('click', '.addToCustomList-btn', function () {
+            var name = prompt('请输入歌单名称', '我喜欢的音乐');
+            if (name) {
+                var list = {
+                    name: name,
+                    songs: []
+                };
+                for (var i = 0; i < customLists.length; i++) {
+                    if (customLists[i].name == name) {
+                        list = customLists[i];
+                        let music = $($(this).parent().parent().find('span')).text();
+                        // 判断该歌单是否已有该音乐
+                        for (let j = 0; j < list.songs.length; j++) {
+                            if (list.songs[j] == music) {
+                                alert('该歌单已有该音乐');
+                                return;
+                            }
+                        }
+                        list.songs.push(music);
+                        localStorage.setItem('customLists', JSON.stringify(customLists));
+                        showCustomList();
+                        return;
+                    }
+                }
+                customLists.push(list);
+                list.songs.push(currentMusic);
+                localStorage.setItem('customLists', JSON.stringify(customLists));
+                showCustomList();
+            }
+        });
+
+        // 点击喜欢按钮，将当前音乐添加到我喜欢的音乐歌单
+        $('.music-list').on('click', '.addToLikedList-btn', function () {
+            let music = $($(this).parent().parent().find('span')).text();
+            // 判断是否已有该音乐
+            for (let i = 0; i < customLists[0].songs.length; i++) {
+                if (customLists[0].songs[i] == music) {
+                    alert('已有该音乐');
+                    return;
+                }
+            }
+            customLists[0].songs.push(music);
+            localStorage.setItem('customLists', JSON.stringify(customLists));
+        });
+
+        // 点击删除音乐按钮，将当前音乐从当前歌单中删除
+        $('.music-list').on('click', '.deleteFromCustomList', function () {
+            var index = $(this).parent().parent().index();
+            var name = $('.music-list').attr('name');
+            // alert(name);
+            for (var i = 0; i < customLists.length; i++) {
+                if (customLists[i].name == name) {
+                    customLists[i].songs.splice(index, 1);
+                    localStorage.setItem('customLists', JSON.stringify(customLists));
+                    showCustomList();
+                    showCustomMusicList(customLists[i].songs);
+                    return;
+                }
+            }
+        });
+
+        // 点击自定义歌单列表，展示该歌单内的音乐列表
+        $('.custom-list').on('click', 'li', function () {
+            var index = $(this).index();
+            //切换歌单name
+            $('.music-list').attr('name', customLists[index].name);
+            showCustomMusicList(customLists[index].songs);
         });
     });
 
@@ -538,19 +683,23 @@
             <button class="search-btn">搜索</button>
         </div>
         <div class="account">
-            <img src="images/avatar.jpg" alt="avatar">
+            <img src="image/avatar.jpg" alt="avatar">
             <span>用户名</span>
         </div>
     </div>
 
     <div class="main-content">
+        <!--  左侧侧边栏：已添加的音乐、自定义歌单、推荐歌单 -->
         <div class="left-sidebar">
             <div class="music_added">
-                <h3>歌单一：已添加音乐</h3>
+                <h3>已添加音乐</h3>
             </div>
             <div class="custom-list">
-                <h3>自定义歌单列表</h3>
-                <button class="add-list-btn">新建歌单</button>
+                <div class="custom-list-header">
+                    <h3>自定义歌单列表</h3>
+                    <button class="add-list-btn">＋</button>
+                </div>
+
                 <ul>
                 </ul>
             </div>
@@ -561,7 +710,7 @@
         </div>
         <!-- 右侧主体：音乐播放列表 -->
         <div class="right-main">
-            <div class="music-list">
+            <div class="music-list" name="">
                 <ul>
                     <li></li>
                 </ul>
@@ -569,29 +718,17 @@
             <br><br><br><br><br><br><br><br><br><br><br><br>
         </div>
     </div>
-    <!-- 底部栏：播放控制按钮、音乐进度条、音量调节 -->
-    <!-- 用audio标签实现播放功能，进度条和音量调节功能 -->
+    <!-- 底部栏：用audio标签实现播放功能，进度条和音量调节功能 -->
 
     <div class="bottom-bar">
         <img class="pic" src="" alt="">
-        <div>
+        <div class="current-music-info">
             <span id="music-name">音乐名称</span>
             <span id="music-author">作者</span>
         </div>
-        <button><img class=“last-btn” src="image/last.png" alt=""></button>
-        <button><img class="next-btn" src="image/next.png" alt=""></button>
+        <button class="last-btn"><img src="image/last.png" alt="" width="30" height="30"></button>
+        <button class="next-btn"><img src="image/next.png" alt="" width="30" height="30"></button>
         <audio src="" controls="controls"></audio>
-        <!-- <div class="play-btn">
-            <i class="fa fa-play"></i>
-        </div>
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-        <div class="volume-bar">
-            <i class="fa fa-volume-up"></i>
-            <i class="fa fa-volume-down"></i>
-            <i class="fa fa-volume-off"></i>
-        </div> -->
     </div>
 
 
