@@ -342,7 +342,6 @@
         margin-right: 10px;
         cursor: pointer;
     }
-
 </style>
 
 <script>
@@ -350,8 +349,8 @@
     var addedList = [];// 已添加的音乐列表
     var musicHistory = JSON.parse(localStorage.getItem('musicHistory') || '[]');
     var customLists = JSON.parse(localStorage.getItem('customLists') || '[]');
-    var recommendLists = JSON.parse(localStorage.getItem('recommendLists') || '[]');
-    var recommendLists = [];// 推荐歌单列表
+    var recommendList = JSON.parse(localStorage.getItem('recommendList') || '[]');
+    // var recommendList = [];
     var searchList = [];// 搜索结果列表
     var currentMusic = null;
     isliked = false;
@@ -367,23 +366,10 @@
         // alert(customLists.length)
     }
 
-    // 读取music文件夹下所有音乐文件
-    $(function () {
-        $.ajax({
-            url: 'music',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                musicList = data;
-                showMusicList(musicList);
-            }
-        });
-    });
-
     //替换播放音乐为当前音乐
     function replaceMusic(currentMusic) {
         $('.pic').attr('src', 'image/' + currentMusic.replace('.mp3', '.png'));
-        $('#music-name').text(currentMusic);
+        $('#music-name').text(currentMusic.split('.mp3')[0]);
         $('#music-author').text('');
         $('.bottom-bar audio').attr('src', 'music/' + currentMusic);
     }
@@ -418,49 +404,55 @@
     }
 
     //音乐推荐算法
-    // function recommendMusic() {
-    //     // 根据播放历史推荐歌曲,如果历史中超过两个歌曲中含有了相同的作者，则推荐该作者的其余歌曲
-    //     let author = '';
-    //     let count = 0;
-    //     for (let i = 0; i < musicHistory.length; i++) {
-    //         let music = musicHistory[i];
-    //         let index = music.lastIndexOf('-');
-    //         if (index != -1) {
-    //             let author1 = music.slice(0, index);
-    //             if (author1 == author) {
-    //                 count++;
-    //             } else {
-    //                 author = author1;
-    //                 count = 1;
-    //             }
-    //         }
-    //     }
-    //     //将推荐歌曲添加到推荐歌单
-    //     let recommendList = {
-    //         name: '推荐歌单',
-    //         songs: []
-    //     };
-    //     for (let i = 0; i < musicList.length; i++) {
-    //         let music = musicList[i];
-    //         let index = music.lastIndexOf('-');
-    //         if (index != -1) {
-    //             let author1 = music.slice(0, index);
-    //             if (author1 == author && count < 3) {
-    //                 recommendList.songs.push(music);
-    //                 count++;
-    //             }
-    //         }
-    //     }
-    //     recommendLists.push(recommendList);
-    //     localStorage.setItem('recommendLists', JSON.stringify(recommendLists));
-    //     showRecommendList();
-    
-    // }
+    function recommendMusic() {
+        // 根据播放历史,如果历史中超过两个歌曲中含有了相同的作者，则将该作者的其余歌曲,存储到recommendList中，并上传到localStorage
+        var authorList = [];
+        for (var i = 0; i < musicHistory.length; i++) {
+            var author = musicHistory[i].split('-')[1];
+            if (authorList.indexOf(author) == -1) {
+                authorList.push(author);
+            }
+        }
+        // alert(authorList);
+        let count = 0;
+        for (let i = 0; i < authorList.length; i++) {
+            let num = 0;
+            for (let j = 0; j < musicList.length; j++) {
+                if (musicList[j].indexOf(authorList[i]) != -1) {
+                    num++;
+                }
+            }
+            if (num > 1) {
+                count++;
+            }
+        }
+        if (count >= 2) {
+            let recommendList = [];
+            for (let i = 0; i < musicList.length; i++) {
+                if (musicList[i].indexOf(authorList[0]) != -1 || musicList[i].indexOf(authorList[1]) != -1) {
+                    recommendList.push(musicList[i]);
+                }
+            }
+            localStorage.setItem('recommendList', JSON.stringify(recommendList));
+        }
+    }
 
 
 
     //点击对应音乐将当前音乐替换为该音乐
     $(document).ready(function () {
+        // 读取music文件夹下所有音乐文件
+        $.ajax({
+            url: 'music',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                musicList = data;
+                showMusicList(musicList);
+            }
+        });
+
+
         // 将musichistory中最后一次播放的音乐作为当前音乐
         if (musicHistory.length > 0) {
             currentMusic = musicHistory[musicHistory.length - 1];
@@ -472,6 +464,7 @@
 
         // 读取localStorage中的数据
         showCustomList();
+
         // 点击音乐列表
         $('.music-list').on('click', 'li', function () {
             var musicName = $(this).find('span').text();
@@ -650,8 +643,15 @@
             // alert('暂未实现');
             musicHistory = JSON.parse(localStorage.getItem('musicHistory') || '[]');
             musicHistory.shift();
-            showCustomMusicList(musicHistory);
+            showMusicList(musicHistory);
         });
+
+        //如果历史超过10个，则删除最早的，只剩下10个
+        for (let i = 10; i < musicHistory.length; i++) {
+            musicHistory.shift(); 
+            localStorage.setItem('musicHistory', JSON.stringify(musicHistory));
+        }
+
 
         //音乐播放完自动下一首
         $('.bottom-bar audio').on('ended', function () {
@@ -678,9 +678,11 @@
         });
 
         //推荐歌单
+
         // 点击推荐歌单列表，展示该歌单内的音乐列表
         $('.recommend-list').on('click', function () {
-            showMusicList(recommendLists);
+            recommendMusic();
+            showMusicList(recommendList);
         });
 
 
