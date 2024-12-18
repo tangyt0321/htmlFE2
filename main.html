@@ -187,33 +187,13 @@
 
     .recommend-list {
         padding: 10px;
-    }
-
-    .recommend-list h3 {
         font-size: 16px;
         color: #333;
-        margin-bottom: 10px;
-    }
-
-    .recommend-list ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .recommend-list li {
-        padding: 10px;
-        border-bottom: 1px solid #ccc;
-        cursor: pointer;
-    }
-
-    .recommend-list li:hover {
         background-color: #f5f5f5;
     }
 
-    .recommend-list li span {
-        font-size: 14px;
-        color: #666;
+    .recommend-list:hover {
+        background-color: #e5e5e5;
     }
 
     .right-main {
@@ -244,7 +224,7 @@
     }
 
     .music-list li:hover {
-        background-color: #f5f5f5;
+        background-color: #e5e5e5;
     }
 
     .music-list li img {
@@ -276,7 +256,7 @@
         position: fixed;
         bottom: 0;
         left: 0;
-        width: 100%;
+        width: 99%;
         height: 80px;
         background-color: #333;
         color: #fff;
@@ -315,6 +295,22 @@
         width: 100%;
         height: 50px;
         margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .history-list {
+        padding: 10px;
+        margin-right: 150px;
+    }
+
+    .history-btn img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        /* margin-right: 10px; */
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
     }
 
     .button-group {
@@ -340,89 +336,26 @@
         cursor: pointer;
     }
 
-    /* 响应式布局 */
-    /* @media screen and (max-width: 768px) {
-       .top-bar {
-            height: 50px;
-            padding: 0 10px;
-        }
+    .move-btn {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
 
-       .search-box input {
-            width: 150px;
-        }
-
-       .account img {
-            width: 25px;
-            height: 25px;
-        }
-
-       .account span {
-            font-size: 14px;
-        }
-
-       .left-sidebar {
-            width: 150px;
-        }
-
-        .custom-list h3 {
-            font-size: 14px;
-        }
-
-       .custom-list li {
-            padding: 5px;
-        }
-
-       .custom-list li span {
-            font-size: 12px;
-        }
-
-        .recommend-list h3 {
-            font-size: 14px;
-        }
-
-       .recommend-list li {
-            padding: 5px;
-        }
-
-        .recommend-list li span {
-            font-size: 12px;
-        }
-
-       .right-main {
-            width: calc(100% - 150px);
-        }
-
-       .music-list li {
-            padding: 5px;
-        }
-
-       .music-list li img {
-            width: 40px;
-            height: 40px;
-        }
-
-       .music-list li span {
-            font-size: 12px;
-        }
-
-       .bottom-bar {
-            height: 50px;
-            padding: 0 10px;
-        }
-    } */
 </style>
 
 <script>
     var musicList = [];// 音乐列表
     var addedList = [];// 已添加的音乐列表
+    var musicHistory = JSON.parse(localStorage.getItem('musicHistory') || '[]');
     var customLists = JSON.parse(localStorage.getItem('customLists') || '[]');
-    // var recommendLists = [{ name: '热门推荐', songs: [] }, { name: '最新推荐', songs: [] }];// 推荐歌单列表
+    var recommendLists = JSON.parse(localStorage.getItem('recommendLists') || '[]');
     var recommendLists = [];// 推荐歌单列表
     var searchList = [];// 搜索结果列表
     var currentMusic = null;
     isliked = false;
-    // 读取localStorage中的数据
-    var musicHistory = JSON.parse(localStorage.getItem('musicHistory') || '[]');
+
 
     //展示歌单
     function showCustomList() {
@@ -442,8 +375,6 @@
             dataType: 'json',
             success: function (data) {
                 musicList = data;
-                const authors = data.map(music => music.author); // 这里假设每个音乐对象都有一个 author 属性
-                console.log(authors);
                 showMusicList(musicList);
             }
         });
@@ -481,10 +412,52 @@
     function showCustomMusicList(musicList) {
         var musicListHtml = '';
         for (var i = 0; i < musicList.length; i++) {
-            musicListHtml += '<li><img src="image/' + musicList[i].replace('.mp3', '.png') + '"><span>' + musicList[i] + '</span><div><button class="deleteFromCustomList">×</button><button class="addToLikedList-btn">喜欢</button><button class="addToCustomList-btn">添加到歌单</button></div></li>';
+            musicListHtml += '<li><button class="move-btn"></button><img src="image/' + musicList[i].replace('.mp3', '.png') + '"><span>' + musicList[i] + '</span><div><button class="deleteFromCustomList">×</button><button class="addToLikedList-btn">喜欢</button><button class="addToCustomList-btn">添加到歌单</button></div></li>';
         }
         $('.music-list ul').html(musicListHtml);
     }
+
+    //音乐推荐算法
+    // function recommendMusic() {
+    //     // 根据播放历史推荐歌曲,如果历史中超过两个歌曲中含有了相同的作者，则推荐该作者的其余歌曲
+    //     let author = '';
+    //     let count = 0;
+    //     for (let i = 0; i < musicHistory.length; i++) {
+    //         let music = musicHistory[i];
+    //         let index = music.lastIndexOf('-');
+    //         if (index != -1) {
+    //             let author1 = music.slice(0, index);
+    //             if (author1 == author) {
+    //                 count++;
+    //             } else {
+    //                 author = author1;
+    //                 count = 1;
+    //             }
+    //         }
+    //     }
+    //     //将推荐歌曲添加到推荐歌单
+    //     let recommendList = {
+    //         name: '推荐歌单',
+    //         songs: []
+    //     };
+    //     for (let i = 0; i < musicList.length; i++) {
+    //         let music = musicList[i];
+    //         let index = music.lastIndexOf('-');
+    //         if (index != -1) {
+    //             let author1 = music.slice(0, index);
+    //             if (author1 == author && count < 3) {
+    //                 recommendList.songs.push(music);
+    //                 count++;
+    //             }
+    //         }
+    //     }
+    //     recommendLists.push(recommendList);
+    //     localStorage.setItem('recommendLists', JSON.stringify(recommendLists));
+    //     showRecommendList();
+    
+    // }
+
+
 
     //点击对应音乐将当前音乐替换为该音乐
     $(document).ready(function () {
@@ -671,6 +644,46 @@
             $('.music-list').attr('name', customLists[index].name);
             showCustomMusicList(customLists[index].songs);
         });
+
+        // 点击历史按钮，展示历史播放列表
+        $('.history-btn').on('click', function () {
+            // alert('暂未实现');
+            musicHistory = JSON.parse(localStorage.getItem('musicHistory') || '[]');
+            musicHistory.shift();
+            showCustomMusicList(musicHistory);
+        });
+
+        //音乐播放完自动下一首
+        $('.bottom-bar audio').on('ended', function () {
+            // recommendMusic();
+            //播放下一首
+            var index = musicHistory.indexOf(currentMusic);
+            var num = musicList.indexOf(currentMusic);
+            if (index == musicHistory.length - 1) {
+                //播放歌单内下一首音乐
+                if (num == musicList.length - 1) {
+                    alert('没有下一首了');
+                    return;
+                }
+                currentMusic = musicList[num + 1];
+                pushAndDeleteSameMusic();
+            } else {
+                index++;
+                currentMusic = musicList[index];
+            }
+            replaceMusic(currentMusic);
+            localStorage.setItem('musicHistory', JSON.stringify(musicHistory));
+            //播放下一首
+            $('.bottom-bar audio')[0].play();
+        });
+
+        //推荐歌单
+        // 点击推荐歌单列表，展示该歌单内的音乐列表
+        $('.recommend-list').on('click', function () {
+            showMusicList(recommendLists);
+        });
+
+
     });
 
 </script>
@@ -694,6 +707,7 @@
             <div class="music_added">
                 <h3>已添加音乐</h3>
             </div>
+
             <div class="custom-list">
                 <div class="custom-list-header">
                     <h3>自定义歌单列表</h3>
@@ -703,9 +717,9 @@
                 <ul>
                 </ul>
             </div>
+
             <div class="recommend-list">
                 <h3>推荐歌单</h3>
-                <ul> </ul>
             </div>
         </div>
         <!-- 右侧主体：音乐播放列表 -->
@@ -729,6 +743,7 @@
         <button class="last-btn"><img src="image/last.png" alt="" width="30" height="30"></button>
         <button class="next-btn"><img src="image/next.png" alt="" width="30" height="30"></button>
         <audio src="" controls="controls"></audio>
+        <button class="history-btn"><img src="image/history.png" alt="" width="30" height="30"></button>
     </div>
 
 
