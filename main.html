@@ -32,6 +32,13 @@
 </head>
 
 <style>
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+    }
+
     /* 底部栏覆盖左侧栏覆盖顶部栏，剩余为主题部分，除主体部分可滑动外，其余部分均固定在顶部左边和底部 */
     .top-bar {
         position: fixed;
@@ -227,6 +234,23 @@
         background-color: #e5e5e5;
     }
 
+    .move-btn {
+        width: 20px;
+        height: 60px;
+        background-color: #ffffff;
+        border: 0;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .music-list li:hover .move-btn {
+        background-color: #e5e5e5;
+    }
+
+    .move-btn:hover {
+        background-color: #663f3f;
+    }
+
     .music-list li img {
         width: 50px;
         height: 50px;
@@ -335,13 +359,6 @@
         align-items: center;
         cursor: pointer;
     }
-
-    .move-btn {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-        cursor: pointer;
-    }
 </style>
 
 <script>
@@ -349,7 +366,7 @@
     var addedList = [];// 已添加的音乐列表
     var musicHistory = JSON.parse(localStorage.getItem('musicHistory') || '[]');
     var customLists = JSON.parse(localStorage.getItem('customLists') || '[]');
-    var recommendList = JSON.parse(localStorage.getItem('recommendList') || '[]');
+    var recommendList = []
     // var recommendList = [];
     var searchList = [];// 搜索结果列表
     var currentMusic = null;
@@ -359,6 +376,7 @@
     //展示歌单
     function showCustomList() {
         var customListHtml = '';
+        // customLists[0].name = '我喜欢的音乐';
         for (var i = 0; i < customLists.length; i++) {
             customListHtml += '<li><span>' + customLists[i].name + '</span><button class="delete-list-btn">×</button></li>';
         }
@@ -369,7 +387,7 @@
     //替换播放音乐为当前音乐
     function replaceMusic(currentMusic) {
         $('.pic').attr('src', 'image/' + currentMusic.replace('.mp3', '.png'));
-        $('#music-name').text(currentMusic.split('.mp3')[0]);
+        $('#music-name').text(currentMusic);
         $('#music-author').text('');
         $('.bottom-bar audio').attr('src', 'music/' + currentMusic);
     }
@@ -405,39 +423,26 @@
 
     //音乐推荐算法
     function recommendMusic() {
-        // 根据播放历史,如果历史中超过两个歌曲中含有了相同的作者，则将该作者的其余歌曲,存储到recommendList中，并上传到localStorage
-        var authorList = [];
+        // 根据播放历史,如果历史中超过两个歌曲中含有了相同的作者，则将该作者的其余歌曲,存储到recommendList中
+        var authors = [];
         for (var i = 0; i < musicHistory.length; i++) {
-            var author = musicHistory[i].split('-')[1];
-            if (authorList.indexOf(author) == -1) {
-                authorList.push(author);
+            var author = musicHistory[i].split('.mp3')[0].split('-')[0];
+            if (authors.indexOf(author) == -1) {
+                authors.push(author);
             }
         }
-        // alert(authorList);
-        let count = 0;
-        for (let i = 0; i < authorList.length; i++) {
-            let num = 0;
-            for (let j = 0; j < musicList.length; j++) {
-                if (musicList[j].indexOf(authorList[i]) != -1) {
-                    num++;
-                }
-            }
-            if (num > 1) {
-                count++;
-            }
-        }
-        if (count >= 2) {
-            let recommendList = [];
-            for (let i = 0; i < musicList.length; i++) {
-                if (musicList[i].indexOf(authorList[0]) != -1 || musicList[i].indexOf(authorList[1]) != -1) {
+        // alert(authors);
+        // alert(musicList);
+        for (var i = 0; i < musicList.length; i++) {
+            var author = musicList[i].split('.mp3')[0].split('-')[0];
+            //排除已添加的音乐
+            if (recommendList.indexOf(musicList[i]) == -1) {
+                if (authors.indexOf(author) != -1 && musicHistory.indexOf(musicList[i]) == -1) {
                     recommendList.push(musicList[i]);
                 }
             }
-            localStorage.setItem('recommendList', JSON.stringify(recommendList));
         }
     }
-
-
 
     //点击对应音乐将当前音乐替换为该音乐
     $(document).ready(function () {
@@ -451,7 +456,6 @@
                 showMusicList(musicList);
             }
         });
-
 
         // 将musichistory中最后一次播放的音乐作为当前音乐
         if (musicHistory.length > 0) {
@@ -534,7 +538,7 @@
                 return;
             }
             let num = 1;
-            for (let i = 0; i < customLists.length; i++) {
+            for (let i = 1; i < customLists.length; i++) {
                 //选择含有“新建歌单”的歌单名称的最后一个数字加一作为新建歌单的名称
                 if (customLists[i].name.indexOf('新建歌单') != -1) {
                     num = parseInt(customLists[i].name.split('新建歌单')[1]) + 1;
@@ -570,7 +574,7 @@
 
         // 点击添加到歌单按钮，将当前音乐添加到该歌单
         $('.music-list').on('click', '.addToCustomList-btn', function () {
-            var name = prompt('请输入歌单名称', '我喜欢的音乐');
+            var name = prompt('请输入歌单名称', '新建歌单1');
             if (name) {
                 var list = {
                     name: name,
@@ -632,11 +636,113 @@
 
         // 点击自定义歌单列表，展示该歌单内的音乐列表
         $('.custom-list').on('click', 'li', function () {
+            // alert(customLists[$(this).index()].songs);
             var index = $(this).index();
             //切换歌单name
             $('.music-list').attr('name', customLists[index].name);
             showCustomMusicList(customLists[index].songs);
         });
+
+        // 当在move-btn上按住鼠标左键时,记录当前所在的歌曲索引，当鼠标松开时，若移动到的move-btn的索引与当前歌曲索引不同，将当前歌曲移动到新的索引处，其他歌曲的索引也相应变化
+        $('.music-list').on('mousedown', '.move-btn', function (e) {
+            $(this).css('background-color', '#c5c5c5');
+            var index = $(this).parent().index();//当前歌曲索引
+            var music = $($(this).parent().find('span')).text();//当前歌曲名
+            var name = $('.music-list').attr('name');//当前歌单名
+            var i = 0;
+            for (i = 0; i < customLists.length; i++) {
+                if (customLists[i].name == name) {
+                    break;
+                }
+            }
+            //鼠标松开时，判断是否移动到其他歌曲的move-btn上
+            $(document).on('mouseup', function (e) {
+                var newIndex = $(e.target).parent().index();
+                if (index < newIndex) {
+                    //将index到newIndex之间（包括newIndex）的歌曲全部往前移动一位
+                    for (let j = index; j < newIndex; j++) {
+                        // console.log(j);
+                        customLists[i].songs[j] = customLists[i].songs[j + 1];
+                        // alert(customLists[i].songs[j]);
+                    }
+                    //将当前歌曲插入到newIndex处
+                    customLists[i].songs[newIndex] = music;
+                    localStorage.setItem('customLists', JSON.stringify(customLists));
+                    showCustomMusicList(customLists[i].songs);
+                } else if (index > newIndex) {
+                    // 将newIndex到index之间（包括newIndex）的歌曲全部往后移动一位
+                    for (let j = index; j > newIndex; j--) {
+                        customLists[i].songs[j] = customLists[i].songs[j - 1];
+                        console.log(j);
+                    }
+                    //将当前歌曲插入到newIndex处
+                    customLists[i].songs[newIndex] = music;
+                    localStorage.setItem('customLists', JSON.stringify(customLists));
+                    showCustomMusicList(customLists[i].songs);
+                } else {
+                    // 未移动到其他歌曲的move-btn上，恢复move-btn样式
+                    $('.music-list').off('mouseenter', '.move-btn');
+                    $('.music-list').off('mouseleave', '.move-btn');
+                    $('.music-list').off('mouseup');
+                }
+                // 取消鼠标事件监听
+                $(document).off('mouseup');
+            });
+            $(this).css('background-color', '#c5c5c5');
+        });
+
+        // $('.music-list').on('mousedown', '.move-btn', function (e) {
+        //     $(this).css('background-color', 'red');
+
+        //     var $currentButton = $(this);
+        //     var index = $currentButton.parent().index(); // 当前歌曲索引
+        //     var music = $currentButton.parent().find('span').text(); // 当前歌曲名
+        //     var name = $('.music-list').attr('name'); // 当前歌单名
+        //     var i;
+
+        //     // 查找当前歌单的 index
+        //     for (i = 0; i < customLists.length; i++) {
+        //         if (customLists[i].name == name) {
+        //             break;
+        //         }
+        //     }
+
+        //     // 附加鼠标移动事件
+        //     $(document).on('mousemove.move', function (e) {
+        //         $('.move-btn').on('mouseenter.move', function (e) {
+        //             var newIndex = $(e.target).parent().index();
+        //             if (index !== newIndex) {
+        //                 // 更新歌曲位置
+        //                 customLists[i].songs[index] = customLists[i].songs[newIndex];
+        //                 customLists[i].songs[newIndex] = music;
+        //                 index = newIndex;
+        //                 localStorage.setItem('customLists', JSON.stringify(customLists));
+        //                 showCustomMusicList(customLists[i].songs);
+        //             }
+        //         });
+        //     });
+
+        //     // 鼠标松开时，取消事件监听
+        //     $(document).one('mouseup', function (e) {
+        //         $(document).off('mousemove.move');
+        //         $('.move-btn').off('mouseenter.move');
+        //         // 可选：重新设置背景颜色，或执行其他清理操作
+        //         $currentButton.css('background-color', '');
+        //     });
+        // });
+
+
+        // //鼠标移入move-btn时，改变move-btn的背景颜色
+        // $('.music-list').on('mouseenter', '.move-btn', function () {
+        //     $(this).css('background-color', '#c5c5c5');
+        // });
+
+        // //鼠标移出move-btn时，恢复move-btn的背景颜色
+        // $('.music-list').on('mouseleave', '.move-btn', function () {
+        //     $(this).css('background-color', '');
+        // });
+
+
 
         // 点击历史按钮，展示历史播放列表
         $('.history-btn').on('click', function () {
@@ -648,7 +754,7 @@
 
         //如果历史超过10个，则删除最早的，只剩下10个
         for (let i = 10; i < musicHistory.length; i++) {
-            musicHistory.shift(); 
+            musicHistory.shift();
             localStorage.setItem('musicHistory', JSON.stringify(musicHistory));
         }
 
